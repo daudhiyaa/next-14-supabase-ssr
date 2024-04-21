@@ -92,6 +92,7 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='password'
@@ -100,17 +101,17 @@ export default function RegisterForm() {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder='password'
+                  placeholder='*****'
                   {...field}
                   type='password'
                   onChange={field.onChange}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='confirm'
@@ -119,17 +120,17 @@ export default function RegisterForm() {
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder='Confirm Password'
+                  placeholder='*****'
                   {...field}
                   type='password'
                   onChange={field.onChange}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Button type='submit' className='w-full flex gap-2'>
           Register
           <AiOutlineLoading3Quarters className={cn('animate-spin')} />
