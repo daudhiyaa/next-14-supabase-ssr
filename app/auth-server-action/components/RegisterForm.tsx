@@ -18,6 +18,7 @@ import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { signUpWithEmailAndPassword } from '../actions';
+import { useTransition } from 'react';
 
 const passwordMinLength = 6;
 
@@ -37,6 +38,8 @@ const FormSchema = z
   });
 
 export default function RegisterForm() {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -47,27 +50,29 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = await signUpWithEmailAndPassword(data);
-    const { error } = JSON.parse(res);
+    startTransition(async () => {
+      const res = await signUpWithEmailAndPassword(data);
+      const { error } = JSON.parse(res);
 
-    let toastTitle = 'You submitted the following values:',
-      toastDescription = JSON.stringify(data, null, 2),
-      toastVariant: 'default' | 'destructive' = 'default';
+      let toastTitle = 'You submitted the following values:',
+        toastDescription = JSON.stringify(data, null, 2),
+        toastVariant: 'default' | 'destructive' = 'default';
 
-    if (error) {
-      toastTitle = 'Error';
-      toastDescription = error.message;
-      toastVariant = 'destructive';
-    }
+      if (error) {
+        toastTitle = 'Error';
+        toastDescription = error.message;
+        toastVariant = 'destructive';
+      }
 
-    toast({
-      variant: toastVariant,
-      title: toastTitle,
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{toastDescription}</code>
-        </pre>
-      )
+      toast({
+        variant: toastVariant,
+        title: toastTitle,
+        description: (
+          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+            <code className='text-white'>{toastDescription}</code>
+          </pre>
+        )
+      });
     });
   }
 
@@ -132,8 +137,10 @@ export default function RegisterForm() {
         />
 
         <Button type='submit' className='w-full flex gap-2'>
-          Register
-          <AiOutlineLoading3Quarters className={cn('animate-spin')} />
+          Sign Up
+          <AiOutlineLoading3Quarters
+            className={cn('animate-spin', { hidden: !isPending })}
+          />
         </Button>
       </form>
     </Form>
