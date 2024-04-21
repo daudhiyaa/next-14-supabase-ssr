@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import readUserSession from '@/lib/actions';
 import { redirect } from 'next/navigation';
+import SignOut from './components/SignOut';
 
 export default async function Page() {
   const todos = [
@@ -23,6 +24,7 @@ export default async function Page() {
   return (
     <div className='flex justify-center items-center h-screen'>
       <div className='w-96 space-y-5'>
+        <SignOut />
         <CreateForm />
 
         {todos?.map((todo, index) => {
@@ -35,7 +37,7 @@ export default async function Page() {
                 {todo.title}
               </h1>
 
-              <Button>delete</Button>
+              <Button>Delete</Button>
               <Button>Update</Button>
             </div>
           );
